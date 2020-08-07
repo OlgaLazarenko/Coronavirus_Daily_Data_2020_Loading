@@ -1,27 +1,53 @@
 '''
-Project Name: Coronavirus_Daily_Data_2020
+Project Name: Coronavirus_Daily_Data_2020_Loading
 Date started: Aug 05, 2020
 Author: Olga Lazarenko
 Description: the purpose of the program:
 			- read csv file containing coronavirus daily data of 2020 year;
-            - user the configuration file to provide the initilal data file path, the path for the output validated data,
+            - use the configuration file to provide the initilal data file path, the path for the output validated data,
               the path of the data with errors/ validation failed 
 			- validate the data: the rows with errors will be removed and saved at a special file;
-			- count the rows at the initial data file, at the output file, at the errors file;
 			- count the rows at the initial data file/s, the output file, the errors file;
 			  count the rows with errors for each field			 
 			 	
-Specification: 1)dispatching_base_num: the values should be in the form 'B00123', the first character should be a letter and the following five
-				characters should be numbers;
-				2)pickup_datetime: the values should be in the format "%d/%m/%Y %H:%M" (ex: '02/15/2019 16:07')
-				3)dropoff_datetime: the values should be in the format "%d/%m/%Y %H:%M"
-				4)PULocation: the values should be three or less characters long, only positive decimals are allowed
-				5)DOLocation: the values shold be three or less characters long, only positive decimals are allowed
-				6)flag: the values can be either 1 or blank
+Specification:
+			1)iso_code: an uppercase three letter word
+			2)continent: the name of a continent
+			3)location: the name of a country
+			4)date at the format M/D/YYYY
+			5)total cases: a positive integer, zero or null are allowed
+			6)new cases: a positive integer, zero or null are allowed
+			7)total deaths: a positie integer, zero or null are allowed
+			8)new_deaths: a positive integer, zero or null are allowed
+			9)total_cases_per_million: a positive decimal or integer number
+			10)new_cases_per_million: a positive decimal or integer number
+			11)total_deaths_per_million: a positive decimal or integer number
+			12)new_deaths_per_million: a positivie decimal or integer number
+			13)new_tests:a positive integer, zero or null are allowed
+			14)total_testes: a positive integer,zero or null are allowed
+			15)total_tests_per_fhousand: a positive integer, zero or null are allowed
+			16)new_tests_smoothed: a positive integer, zero or null are allowed
+			17)new_tests_smoothed: a positive integer, zero or null are allowed
+			18)tests_units
+			19)stringency_index:a positive decimal or integer,zero or null are allowed
+			20)population: a positive integer, zero or null are not allowed
+			21)population_density: a positive decimal or integer, zero or null are not allowed
+			23)median_age: a positive integer, zero or null are not allowed
+			24)aged_65_older: a positive decimal or integer,<100, zero or null are  not allowed
+			25)aged_70_older: a positive decimal or integer, <100, zero or null are not alloed
+			26)gdp_per_capita: a positive decimal or integer, zero or null are not allowed
+			27)extrime_poverty: a positive decimal or ingter, <100, zero or null are allowed
+			28)cordiovasc_death_rate: a positive decimal or integer, zero or nul are not allowed
+			29)diabetes_prevalance: a positive decimal or integer,<100, zero or null are not alloed 
+			30)female_smokers: a positive decimal or integer,<100
+			31)male_smokers: a positive decimal or integer, <100
+			32)hand_washing_facilities: a positive decimal or integer
+			33)hospital_beds_per_thousand: a positive decimal or integer, zero or null is not allowed
+			34)life_expectancy: a positive decimal or integer,<150, zero or null is not allowed
 				
 
-Data Source: https://data.cityofnewyork.us/Transportation/2019-High-Volume-FHV-Trip-Records/4p5c-cbgn/data
-			a sample of data was used to check if the code performes properly
+Data Source: https://data.world/markmarkoh/coronavirus-data
+Size: 1.74 MB
 '''
 
 import configparser
