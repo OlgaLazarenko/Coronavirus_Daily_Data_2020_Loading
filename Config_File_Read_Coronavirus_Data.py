@@ -43,7 +43,7 @@ Specification:
 			31)male_smokers: a positive decimal or integer, <100
 			32)hand_washing_facilities: a positive decimal or integer
 			33)hospital_beds_per_thousand: a positive decimal or integer, zero or null is not allowed
-			34)life_expectancy: a positive decimal or integer,<150, zero or null is not allowed
+			34)life_expectancy: a positive decimal or integer, zero or null is not allowed
 				
 
 Data Source: https://data.world/markmarkoh/coronavirus-data
@@ -52,32 +52,48 @@ Size: 1.74 MB
 
 import configparser
 
+my_file= 'E:\_Python_Projects\GitHub_Coronavirus_Daily_Data_2020_Loading\Variables_File.ini'
+
+config = configparser.ConfigParser() # initialize a ConfigParser object
+config.read(my_file)
+print(config.sections())
+
+#get the files from the configuration file Variables_File.ini
+file_input= config.get('files','input_file')
+file_output= config.get('files','output_file')
+file_errors= config.get('files','errors_file')
 
 
-my_file="E:\_Python_Projects\GitHub_Coronavirus_Daily_Data\Variables_File.ini" # define the file you will read the initial file information
+print()
+file_input = file_input[1:]
+file_input = file_input[:-1]
 
-parser=configparser.RawConfigParser()
+file_output = file_output[1:]
+file_output = file_output[:-1]
 
-print('1')
-parser.read(my_file)
-print('2')
-#to access the elements 
-print(parser.sections())
-print('3')
-print(parser.sections())
-print('4')
-print(parser.get("coronavirus_data"))
-print('5')
-print(parser.has_section('coronavirus_data'))
+file_errors = file_errors[1:]
+file_errors = file_errors[:-1]
+print('---------------------')
+print(file_input)
+print(file_output)
+print(file_errors)
 
+num_loop = 1
 # open and read the data file
-input_file='E:\_Python_Projects_Data\Coronavirus_Data\Covid_Data.csv'
-with open(input_file,'r') as data_file:
-    line=data_file.readline() #read the header
-    print(line)
-    n=1
-    while n<=10: # print the first 10 rows of the input file
-        line=data_file.readline()
-        print(line)
-        n+=1
-    
+print()
+print('-------------------------------------------------')
+with open(file_input,'r') as file1:
+	with open(file_output,'w+') as file2:
+		with open (file_errors,'w+') as file3:
+			header = file1.readline() # read the header 
+			if num_loop==1: # the columns name should be written to the output and errors files only once 
+				file2.write(header) #write the columns name to the output file 
+				file3.write(header) #write  the columns names to the errors file
+			num_loop+=1
+		
+			for line in file1:
+				line = file1.readline()
+				file2.write(line)
+				
+	
+	
