@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 '''
 Project Name: Coronavirus_Daily_Data_2020_Loading
 Date started: Aug 05, 2020
@@ -51,11 +52,22 @@ Size: 1.74 MB
 '''
 
 import configparser
+import csv
+import os,sys 
+
+# check if the initial file exists
+os.chdir(r'E:\_Python_Projects')
+print()
+print(open(r'E:\_Python_Projects\GitHub_Coronavirus_Daily_Data_2020_Loading\Variables_File.ini'))
+print()
+print("The initial file exists:  " + str(os.path.exists("E:\\_Python_Projects\\GitHub_Coronavirus_Daily_Data_2020_Loading\Variables_File.ini")))
+print()
 
 my_file= 'E:\_Python_Projects\GitHub_Coronavirus_Daily_Data_2020_Loading\Variables_File.ini'
 
 config = configparser.ConfigParser() # initialize a ConfigParser object
 config.read(my_file)
+print('*-----------------*')
 print(config.sections())
 
 #get the files from the configuration file Variables_File.ini
@@ -82,9 +94,9 @@ num_loop = 1
 # open and read the data file
 print()
 print('-------------------------------------------------')
-with open(file_input,'r') as file1:
-	with open(file_output,'w+') as file2:
-		with open (file_errors,'w+') as file3:
+with open(file_input,'rt') as file1:
+	with open(file_output,'w') as file2:
+		with open (file_errors,'w') as file3:
 			header = file1.readline() # read the header 
 			if num_loop==1: # the columns name should be written to the output and errors files only once 
 				file2.write(header) #write the columns name to the output file 
@@ -94,6 +106,26 @@ with open(file_input,'r') as file1:
 			for line in file1:
 				line = file1.readline()
 				file2.write(line)
+
+print('The initial file (sample):')
+print()				
+with open(file_input,'rt') as file1: # read the initial file
+	for i in range(0,6):# print the first ten rows
+		text=file1.readline()
+		print(text,end='')
+print()
+print('-------------------------')
+print()
+print('The output file (sample):')
+print()				
+with open(file_output,'rt') as file2: # read the initial file
+	for i in range(0,6):# print the first ten rows
+		text=file2.readline()
+		print(text,end='')
+print()
+print('---------------------------')
+print()
+
 				
 	
 	
