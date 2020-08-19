@@ -52,7 +52,7 @@ Size: 1.74 MB
 '''
 
 import configparser #import modules
-import csv
+import csv, numbers, decimal
 import os,sys,datetime 
 
 # check if the initial file exists
@@ -90,11 +90,7 @@ print(file_input)
 print(file_output)
 print(file_errors)
 
-#  declare the variable for the fields/ the columns 
 
-
-
-num_loop = 1
 # open and read the data file
 print()
 print('-------------------------------------------------')
@@ -144,7 +140,7 @@ with open(file_input,'rt') as file1:
 				new_deathes = item_list[7]
 				total_cases_per_million = item_list[8]
 				new_cases_per_million = item_list[9]
-				total_deaths_per_million = item_list[10]
+				total_deaths_per_million = item_list[1]
 				new_deather_per_million  = item_list[11]
 				new_tests = item_list[12]
 				total_tests = item_list[13]
@@ -153,30 +149,37 @@ with open(file_input,'rt') as file1:
 				new_tests_smoothed = item_list[16]
 				new_tests_smoothed_per_thousand = item_list[17]
 
-				#  create a function
-				def validate_cases(num):
-					num = num.strip() # remove leading and trailing whitespaces
-					if not num.isdigit() or num != '' :
-						file3.write(line)
-
-				#  call the function to validate the fields
-				validate_cases(total_cases)
-				validate_cases(new_cases)
-				validate_cases(total_cases)
-				validate_cases(new_deathes)
-				validate_cases(total_cases_per_million)
-				validate_cases(new_cases_per_million)
-				validate_cases(total_deaths_per_million)
-				validate_cases(new_deather_per_million)
-				validate_cases(new_tests)
-				validate_cases(total_tests)
-				validate_cases(total_tests_per_thousand)
-				validate_cases(new_tests_per_thousand)
-				validate_cases(new_tests_smoothed)
-				validate_cases(new_tests_smoothed_per_thousand)
-
+				# because the mentioned above fields are similar in constraits 
+				# they will be combined into a list,
+				#  the validation will be performed by looping throught the list
+			
+				list_cases = [] # declare the list 
+				list_cases.append(total_cases) # append to the list
+				list_cases.append(new_cases)
+				list_cases.append(total_deaths)
+				list_cases.append(new_deathes)
+				list_cases.append(total_cases_per_million)
+				list_cases.append(new_cases_per_million)
+				list_cases.append(total_deaths_per_million)
+				list_cases.append(new_deather_per_million)
+				list_cases.append(new_tests)
+				list_cases.append(total_tests)
+				list_cases.append(total_tests_per_thousand)
+				list_cases.append(new_tests_per_thousand)
+				list_cases.append(new_tests_smoothed)
+				list_cases.append(new_tests_smoothed_per_thousand)
 				
-				file2.write(line)
+				for case in list_cases: #  loop thought the list elements
+					case = case.strip() #  remove leading and trailing whitespaces
+					if case != '' : # validation of the list element/s according the contraints from the specification
+						try: 
+							isinstance(case, numbers.Number)
+						except:
+							file3.write(line) #  write to the errors file
+							continue
+
+
+				file2.write(line) #  write to the output file
 
 				
 
