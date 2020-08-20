@@ -32,8 +32,8 @@ Specification:
 			18)tests_units
 			19)stringency_index:a positive decimal or integer,zero or null are allowed
 			20)population: a positive integer, zero or null are not allowed
-			21)population_density: a positive decimal or integer, zero or null are not allowed
-			23)median_age: a positive integer, zero or null are not allowed
+			21)population_density: a positive decimal or integer, zero or null are allowed
+			23)median_age: a positive integer, zero or null are  allowed
 			24)aged_65_older: a positive decimal or integer,<100, zero or null are  not allowed
 			25)aged_70_older: a positive decimal or integer, <100, zero or null are not alloed
 			26)gdp_per_capita: a positive decimal or integer, zero or null are not allowed
@@ -149,9 +149,9 @@ with open(file_input,'rt') as file1:
 				new_tests_smoothed = item_list[16]
 				new_tests_smoothed_per_thousand = item_list[17]
 
-				# because the mentioned above fields are similar in constraits 
+				# because the mentioned above fields are similar in constraints
 				# they will be combined into a list,
-				#  the validation will be performed by looping throught the list
+				#  the validation will be performed by looping through the list
 			
 				list_cases = [] # declare the list 
 				list_cases.append(total_cases) # append to the list
@@ -177,8 +177,58 @@ with open(file_input,'rt') as file1:
 						except:
 							file3.write(line) #  write to the errors file
 							continue
+				
 
+				#  validate the population field
+				population = item_list[20]
+				try:
+					int(population) > 0 
+				except:
+					file3.write(line)
+					continue
 
+				# validate the following fields
+				# decalare variables
+				population_dens = item_list[21]
+				median_age = item_list[22]
+				aged_65_older = item_list[23]
+				aged_70_older = item_list[24]
+				gdp = item_list[25]
+				poverty = item_list[26]
+				cardio = item_list[27]
+				diabet = item_list[28]
+				female_smokers = item_list[29]
+				male_smokers = item_list[30]
+				hand_washing_facilities = item_list[31]
+				hospital_beds = item_list[32]
+				life_expectancy = item_list[33]
+
+				list2 = [] #  declare a list
+				list2.append(population_dens)
+				list2.append(median_age)
+				list2.append(aged_65_older)
+				list2.append(aged_70_older)
+				list2.append(gdp)
+				list2.append(poverty)
+				list2.append(cardio)
+				list2.append(diabet)
+				list2.append(female_smokers)
+				list2.append(male_smokers)
+				list2.append(hand_washing_facilities)
+				list2.append(life_expectancy)
+				
+				
+				for item in list2 :
+					try :
+						isinstance(float(item), numbers.Number)						
+					except :
+						if item.strip() =='':
+							file2.write(line)
+							continue
+						else:
+							file3.write(line)
+							continue
+    					
 				file2.write(line) #  write to the output file
 
 				
@@ -189,7 +239,7 @@ with open(file_input,'rt') as file1:
 print('The initial file (sample):')
 print()				
 with open(file_input,'rt') as file1: # read the initial file
-	for i in range(0,6):# print the first ten rows
+	for i in range(0,21):# print the first ten rows
 		text=file1.readline()
 		print(text,end='')
 print()
@@ -200,14 +250,14 @@ print()
 print('The output file (sample):')
 print()				
 with open(file_output,'rt') as file2: # read the initial file
-	for i in range(0,11):# print the first ten rows
+	for i in range(0,21):# print the first ten rows
 		text = file2.readline()
 		print(text,end = '')
 print()
 print('-----------------------------')
 print('errors_file')
 with open(file_errors, 'rt') as file3:
-	for a in range(0,11):
+	for a in range(0,21):
 		text = file3.readline()
 		print(text, end = '')
 
