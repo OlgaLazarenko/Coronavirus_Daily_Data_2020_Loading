@@ -16,19 +16,19 @@ Specification:
 			2)continent: the name of a continent, a string, not null
 			3)location: the name of a country, not null 
 			4)date at the format M/D/YYYY, not null 
-			5)total cases: a positive integer, zero or null are allowed
-			6)new cases: a positive integer, zero or null are allowed
-			7)total deaths: a positie integer, zero or null are allowed
-			8)new_deaths: a positive integer, zero or null are allowed
-			9)total_cases_per_million: a positive integer, zero or null are allowed
-			10)new_cases_per_million: a positive integer, zero or null are allowed
-			11)total_deaths_per_million: a positive integer, zero or null are allowed
-			12)new_deaths_per_million: a positive integer, zero or null are allowed
-			13)new_tests:a positive integer, zero or null are allowed
-			14)total_testes: a positive integer,zero or null are allowed
-			15)total_tests_per_fhousand: a positive integer, zero or null are allowed
-			16)new_tests_smoothed: a positive integer, zero or null are allowed
-			17)new_tests_smoothed_per_thousand: a positive integer, zero or null are allowed
+			5)total cases: a positive integer or zero 
+			6)new cases: a positive integer or zero
+			7)total deaths: a positie integer or zero 
+			8)new_deaths: a positive integer or zero
+			9)total_cases_per_million: a positive integer or zero
+			10)new_cases_per_million: a positive integer or zero
+			11)total_deaths_per_million: a positive integer or zero
+			12)new_deaths_per_million: a positive integer or zero
+			13)new_tests:a positive integer or zero
+			14)total_testes: a positive integer or zero
+			15)total_tests_per_fhousand: a positive integer or zero
+			16)new_tests_smoothed: a positive integer or zero
+			17)new_tests_smoothed_per_thousand: a positive integer or zero 
 			18)tests_units
 			19)stringency_index:a positive decimal or integer,zero or null are allowed
 			20)population: a positive integer, zero or null are not allowed
@@ -125,15 +125,25 @@ with open(file_input,'rt') as file1:
 				
 				
 				#  validate the date field
-				date = item_list[3]
-				try:
-					datetime.datetime.strptime(date, '%m/%d/%Y')
-				except:
+				my_date = item_list[3]
+				my_date = my_date.strip()
+				date_list = my_date.split('/')
+
+
+
+				if not int(date_list[0]) in range(1,13) :
 					file3.write(line)
 					continue
-				
-					
-				# validate the following fields
+				elif not int(date_list[1]) in range(1,32) :
+					file3.write(line)
+					continue
+				elif not int(date_list[2]) in range(2019, 2021) :
+					file3.write(line)
+					continue
+    			
+
+						
+				# validate the following fields, positive integers, zero or null are allowed 
 				total_cases = item_list[4]
 				new_cases = item_list[5]
 				total_deaths = item_list[6]
@@ -152,7 +162,7 @@ with open(file_input,'rt') as file1:
 				# because the mentioned above fields are similar in constraints
 				# they will be combined into a list,
 				#  the validation will be performed by looping through the list
-			
+				'''
 				list_cases = [] # declare the list 
 				list_cases.append(total_cases) # append to the list
 				list_cases.append(new_cases)
@@ -168,17 +178,20 @@ with open(file_input,'rt') as file1:
 				list_cases.append(new_tests_per_thousand)
 				list_cases.append(new_tests_smoothed)
 				list_cases.append(new_tests_smoothed_per_thousand)
+				'''
+				'''
+				for item in list_cases :
+					item = item.strip()
+					if not item.isdigit():
+						file3.write(line)
+				'''		
 				
-				for case in list_cases: #  loop thought the list elements
-					case = case.strip() #  remove leading and trailing whitespaces
-					if case != '' : # validation of the list element/s according the contraints from the specification
-						try: 
-							isinstance(case, numbers.Number)
-						except:
-							file3.write(line) #  write to the errors file
-							continue
-				
+				file2.write(line) #  write to the output file
 
+				
+						
+
+			'''
 				#  validate the population field
 				population = item_list[20]
 				try:
@@ -188,6 +201,7 @@ with open(file_input,'rt') as file1:
 					continue
 
 				# validate the following fields
+
 				# decalare variables
 				population_dens = item_list[21]
 				median_age = item_list[22]
@@ -222,14 +236,14 @@ with open(file_input,'rt') as file1:
 					try :
 						isinstance(float(item), numbers.Number)						
 					except :
-						if item.strip() =='':
-							file2.write(line)
+						if item.strip() == '' :
 							continue
 						else:
 							file3.write(line)
 							continue
+				'''
     					
-				file2.write(line) #  write to the output file
+				
 
 				
 
