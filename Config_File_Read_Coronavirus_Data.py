@@ -16,14 +16,17 @@ Specification:
 			2)continent: the name of a continent, a string, not null
 			3)location: the name of a country, not null 
 			4)date at the format M/D/YYYY, not null 
+
 			5)total cases: a positive integer or zero 
 			6)new cases: a positive integer or zero
 			7)total deaths: a positie integer or zero 
 			8)new_deaths: a positive integer or zero
-			9)total_cases_per_million: a positive integer or zero
+
+			9)total_cases_per_million: a positive number int/ decimal or zero
 			10)new_cases_per_million: a positive integer or zero
 			11)total_deaths_per_million: a positive integer or zero
 			12)new_deaths_per_million: a positive integer or zero
+
 			13)new_tests:a positive integer or zero
 			14)total_testes: a positive integer or zero
 			15)total_tests_per_fhousand: a positive integer or zero
@@ -126,20 +129,43 @@ with open(file_input,'rt') as file1:
 				
 				#  validate the date field
 				my_date = item_list[3]
-				my_date = my_date.strip()
-				date_list = my_date.split('/')
+				# check if the format is correct
+				dash_count = my_date.count('/')
 
-
-
-				if not int(date_list[0]) in range(1,13) :
+				if dash_count == 2:
+					# format is correct, continue the checking
+					# split the value by the dashes, create a list
+					list2 = my_date.split('/')
+					# month, day, year values became the elements of the list
+				else:
+					# if the format is wrong, write the line to the errors file 
 					file3.write(line)
 					continue
-				elif not int(date_list[1]) in range(1,32) :
+
+
+				# when the format is OK, check each element of the list
+				# check if the elements contains only numbers
+				if not list2[0].isdigit() :
 					file3.write(line)
 					continue
-				elif not int(date_list[2]) in range(2019, 2021) :
+				elif not list2[1].isdigit() :
 					file3.write(line)
 					continue
+				elif not list2[2].isdigit() :
+					file3.write(line)
+					continue
+				else:
+					# the elements contain only numbers
+					# now check if the values are in the correct range
+					if not int(list2[0]) in range(1,13) :
+						file3.write(line)
+						continue
+					elif not int(list2[1]) in range(1,32) :
+						file3.write(line)
+						continue
+					elif not int(list2[2]) in range(2019, 2021) :
+						file3.write(line)
+						continue
     			
 
 						
@@ -148,6 +174,22 @@ with open(file_input,'rt') as file1:
 				new_cases = item_list[5]
 				total_deaths = item_list[6]
 				new_deathes = item_list[7]
+
+				list3 = []
+				list3.append(total_cases)
+				list3.append(new_cases)
+				list3.append(total_deaths)
+				list3.append(new_deathes)
+
+				for item in list3:
+					def validate_test(item) :
+						item = item.strip()
+						if item != '' :
+							if not item.isdigit() :
+								file3.write(line)
+					
+						
+
 				total_cases_per_million = item_list[8]
 				new_cases_per_million = item_list[9]
 				total_deaths_per_million = item_list[1]
@@ -159,9 +201,27 @@ with open(file_input,'rt') as file1:
 				new_tests_smoothed = item_list[16]
 				new_tests_smoothed_per_thousand = item_list[17]
 
-				# because the mentioned above fields are similar in constraints
-				# they will be combined into a list,
-				#  the validation will be performed by looping through the list
+				'''
+				# create the function validate_test(item) to validate the mentioned above values
+				def validate_test(item) :
+					if item.isdigit() == False :
+						file3.write(line)
+						break
+				'''
+					
+						
+						
+				'''
+				# call the function and do the validation
+				validate_test(item_list[4])
+				
+				# validate_test(item_list[5])
+				# validate_test(item_list[6])
+				'''
+
+				file2.write(line)
+
+			
 				'''
 				list_cases = [] # declare the list 
 				list_cases.append(total_cases) # append to the list
@@ -186,7 +246,7 @@ with open(file_input,'rt') as file1:
 						file3.write(line)
 				'''		
 				
-				file2.write(line) #  write to the output file
+				
 
 				
 						
