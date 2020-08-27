@@ -23,9 +23,9 @@ Specification:
 			8)new_deaths: a positive integer or zero
 
 			9)total_cases_per_million: a positive number int/ decimal or zero
-			10)new_cases_per_million: a positive integer or zero
-			11)total_deaths_per_million: a positive integer or zero
-			12)new_deaths_per_million: a positive integer or zero
+			10)new_cases_per_million: a positive number int/ decimal or zero
+			11)total_deaths_per_million: a positive number int/ decimal or zero
+			12)new_deaths_per_million: a positive number int/decima or zero
 
 			13)new_tests:a positive integer or zero
 			14)total_testes: a positive integer or zero
@@ -181,19 +181,53 @@ with open(file_input,'rt') as file1:
 				list3.append(total_deaths)
 				list3.append(new_deathes)
 
-				for item in list3:
-					def validate_test(item) :
-						item = item.strip()
-						if item != '' :
-							if not item.isdigit() :
-								file3.write(line)
+				
+				def validate_test(item) : #??
+					item = item.strip()
+					if not item.isdigit() :
+						file3.write(line)
+					else:
+						pass
 					
-						
+				
+				if not total_cases.isdigit() :
+					file3.write(line)
+					continue
+				
+				if not new_cases.isdigit() :
+					file3.write(line)
+					continue
 
+				if not total_deaths.isdigit() :
+					file3.write(line)
+					continue
+
+				if not new_deathes.isdigit() :
+					file3.write(line)
+					continue
+
+
+				
 				total_cases_per_million = item_list[8]
 				new_cases_per_million = item_list[9]
-				total_deaths_per_million = item_list[1]
-				new_deather_per_million  = item_list[11]
+				total_deaths_per_million = item_list[10]
+				new_deaths_per_million = item_list[11]
+				
+				# validate the mentioned above values
+				# find out if the value is a positive integer/ or float, otherwise it is an error 
+
+				 
+				if not isinstance(total_cases_per_million, (int, float)) :
+					file3.write(line)
+					continue
+				else:
+					if float(total_cases_per_million) < 0 :
+						file3.write(line)
+						continue
+
+				
+				
+
 				new_tests = item_list[12]
 				total_tests = item_list[13]
 				total_tests_per_thousand = item_list[14]
