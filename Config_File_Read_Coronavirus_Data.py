@@ -109,24 +109,31 @@ with open(file_input,'rt') as file1:
 				item_list = line.split(',') #  split the read line by the commas into a list
 
 
-				#  Validate the fields
+				#  Validate the fields:
 				iso_code = item_list[0]
-				if iso_code == '' :
+				iso_code = iso_code.strip() # remove leading and trailing whitespaces
+				if not iso_code.isalpha()  :
 					file3.write(line) # write to the errors file
+					continue
+				elif len(iso_code) != 3 :
+					file3.write(line)
 					continue
 
 				continent = item_list[1]
-				if continent == '' :
+				continent = continent.strip()
+				if not continent.isalpha() :
 					file3.write(line)
 					continue
 
 
 				location = item_list[2]
-				if location == '' :
+				location = location.strip()
+				if not location.isalpha() :
 					file3.write(line)
 					continue
 				
 				
+
 				#  validate the date field
 				my_date = item_list[3]
 				# check if the format is correct
@@ -142,8 +149,8 @@ with open(file_input,'rt') as file1:
 					file3.write(line)
 					continue
 
-
-				# when the format is OK, check each element of the list
+				
+				# when the format of the date value is OK, check each element of the list
 				# check if the elements contains only numbers
 				if not list2[0].isdigit() :
 					file3.write(line)
@@ -168,7 +175,7 @@ with open(file_input,'rt') as file1:
 						continue
     			
 
-						
+				'''		
 				# validate the following fields, positive integers, zero or null are allowed 
 				total_cases = item_list[4]
 				new_cases = item_list[5]
@@ -180,14 +187,6 @@ with open(file_input,'rt') as file1:
 				list3.append(new_cases)
 				list3.append(total_deaths)
 				list3.append(new_deathes)
-
-				
-				def validate_test(item) : #??
-					item = item.strip()
-					if not item.isdigit() :
-						file3.write(line)
-					else:
-						pass
 					
 				
 				if not total_cases.isdigit() :
@@ -207,7 +206,7 @@ with open(file_input,'rt') as file1:
 					continue
 
 
-				
+				'''
 				total_cases_per_million = item_list[8]
 				new_cases_per_million = item_list[9]
 				total_deaths_per_million = item_list[10]
@@ -216,18 +215,9 @@ with open(file_input,'rt') as file1:
 				# validate the mentioned above values
 				# find out if the value is a positive integer/ or float, otherwise it is an error 
 
-				 
-				if not isinstance(total_cases_per_million, (int, float)) :
-					file3.write(line)
-					continue
-				else:
-					if float(total_cases_per_million) < 0 :
-						file3.write(line)
-						continue
 
 				
-				
-
+			
 				new_tests = item_list[12]
 				total_tests = item_list[13]
 				total_tests_per_thousand = item_list[14]
@@ -235,23 +225,10 @@ with open(file_input,'rt') as file1:
 				new_tests_smoothed = item_list[16]
 				new_tests_smoothed_per_thousand = item_list[17]
 
-				'''
-				# create the function validate_test(item) to validate the mentioned above values
-				def validate_test(item) :
-					if item.isdigit() == False :
-						file3.write(line)
-						break
-				'''
-					
-						
-						
-				'''
-				# call the function and do the validation
-				validate_test(item_list[4])
 				
-				# validate_test(item_list[5])
-				# validate_test(item_list[6])
-				'''
+				
+					
+			
 
 				file2.write(line)
 
@@ -273,12 +250,8 @@ with open(file_input,'rt') as file1:
 				list_cases.append(new_tests_smoothed)
 				list_cases.append(new_tests_smoothed_per_thousand)
 				'''
-				'''
-				for item in list_cases :
-					item = item.strip()
-					if not item.isdigit():
-						file3.write(line)
-				'''		
+				
+			
 				
 				
 
@@ -335,8 +308,7 @@ with open(file_input,'rt') as file1:
 						else:
 							file3.write(line)
 							continue
-				'''
-    					
+			'''
 				
 
 				
