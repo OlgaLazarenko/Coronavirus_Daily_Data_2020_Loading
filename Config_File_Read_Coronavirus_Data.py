@@ -93,6 +93,9 @@ print(file_input)
 print(file_output)
 print(file_errors)
 
+size = os.path.getsize(file_input)
+
+
 
 # open and read the data file
 print()
@@ -103,34 +106,79 @@ with open(file_input,'rt') as file1:
 			line = file1.readline() #  read the names of the fields/ the header 
 			file2.write(line) #  write the header to the output file 
 			file3.write(line)
-			
-			while line:
+
+			while True:
 				line = file1.readline()
-				item_list = line.split(',') #  split the read line by the commas into a list
+				if line.endswith('\n') : # line with data ends with '\n'
+					
+					item_list = line.split(',') #  split the line into the list by commas
+
+					# validate the fields of the line/ the elements of the list 
+					# the criterias of validation can be found at the specification of the project
+
+					iso_code = item_list[0]
+					# iso_code field can contain '_', for example OWID_KOS
+					# to keep such kind of values:
+					iso_code = iso_code.replace('_','')
+					# also the field con contain (), for example Sint Maarten (Dutch part)
+					# to handle this, replace ()
+					iso_code = iso_code.replace("(",'')
+					iso_code = iso_code.replace(")",'')
+					iso_code = iso_code.strip() # remove leading and trailing whitespaces
+					# create a list with all words in the iso_code
+					w_list = iso_code.split(' ')
+					print(w_list)
+					# loop throught each word and validate it contains only letters
+					for w in w_list:
+						if not w.isalpha()  :
+							file3.write(line) # write to the errors file
+							
+
+					'''
+					continent = item_list[1]
+					continent = continent.strip() # remove leading and trailing whitespaces
+					if continent != '' :
+						if continent not in ('Asia', 'Europe','Oceania','North America','South America','Africa') :
+							file3.write(line) # write to the errors file
+					'''		
+					
 
 
-				#  Validate the fields:
-				iso_code = item_list[0]
-				iso_code = iso_code.strip() # remove leading and trailing whitespaces
-				if not iso_code.isalpha()  :
-					file3.write(line) # write to the errors file
-					continue
-				elif len(iso_code) != 3 :
-					file3.write(line)
-					continue
 
+
+
+					# if line.endswith('\n') loop	
+					file2.write(line) 
+					
+				else: # if it is not line with data, empty line
+					break
+			
+			'''
+			
+				
+			
+				
 				continent = item_list[1]
 				continent = continent.strip()
-				if not continent.isalpha() :
+				if continent not in ('Asia', 'Europe','Oceania','North America','South America','Africa') :
 					file3.write(line)
 					continue
+				
 
 
 				location = item_list[2]
 				location = location.strip()
-				if not location.isalpha() :
-					file3.write(line)
-					continue
+				# the name of a country can contain more than one word
+				# as well the locaton can contain ' or - (for example Cote d'Ivoire, Guinea-Bissau)
+				location = location.replace("'",'')
+				location = location.replace('-',' ')
+				words_list = location.split(' ')
+				# loop throught the list to validate that each element contains only letters
+				# if not, move the row to the errors file
+				for w in words_list :
+					if not w.isalpha() :
+						file3.write(line)
+						continue
 				
 				
 
@@ -175,7 +223,7 @@ with open(file_input,'rt') as file1:
 						continue
     			
 
-				'''		
+					
 				# validate the following fields, positive integers, zero or null are allowed 
 				total_cases = item_list[4]
 				new_cases = item_list[5]
@@ -206,7 +254,7 @@ with open(file_input,'rt') as file1:
 					continue
 
 
-				'''
+				
 				total_cases_per_million = item_list[8]
 				new_cases_per_million = item_list[9]
 				total_deaths_per_million = item_list[10]
@@ -225,31 +273,12 @@ with open(file_input,'rt') as file1:
 				new_tests_smoothed = item_list[16]
 				new_tests_smoothed_per_thousand = item_list[17]
 
-				
-				
-					
+				'''
 			
 
-				file2.write(line)
+				
 
-			
-				'''
-				list_cases = [] # declare the list 
-				list_cases.append(total_cases) # append to the list
-				list_cases.append(new_cases)
-				list_cases.append(total_deaths)
-				list_cases.append(new_deathes)
-				list_cases.append(total_cases_per_million)
-				list_cases.append(new_cases_per_million)
-				list_cases.append(total_deaths_per_million)
-				list_cases.append(new_deather_per_million)
-				list_cases.append(new_tests)
-				list_cases.append(total_tests)
-				list_cases.append(total_tests_per_thousand)
-				list_cases.append(new_tests_per_thousand)
-				list_cases.append(new_tests_smoothed)
-				list_cases.append(new_tests_smoothed_per_thousand)
-				'''
+
 				
 			
 				
@@ -319,7 +348,7 @@ with open(file_input,'rt') as file1:
 print('The initial file (sample):')
 print()				
 with open(file_input,'rt') as file1: # read the initial file
-	for i in range(0,21):# print the first ten rows
+	for i in range(0,26):# print rows
 		text=file1.readline()
 		print(text,end='')
 print()
@@ -330,14 +359,14 @@ print()
 print('The output file (sample):')
 print()				
 with open(file_output,'rt') as file2: # read the initial file
-	for i in range(0,21):# print the first ten rows
+	for i in range(0,26):# print rows
 		text = file2.readline()
 		print(text,end = '')
 print()
 print('-----------------------------')
 print('errors_file')
 with open(file_errors, 'rt') as file3:
-	for a in range(0,21):
+	for a in range(0,26):
 		text = file3.readline()
 		print(text, end = '')
 
