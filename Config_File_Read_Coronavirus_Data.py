@@ -54,7 +54,7 @@ Data Source: https://data.world/markmarkoh/coronavirus-data
 Size: 1.74 MB
 '''
 
-import configparser #import modules
+import configparser # import modules
 import csv, numbers, decimal
 import os,sys,datetime 
 
@@ -92,10 +92,15 @@ print('---------------------')
 print(file_input)
 print(file_output)
 print(file_errors)
+print()
 
 size = os.path.getsize(file_input)
 
-
+my_number = 'A7777'
+if not my_number.isalpha() :
+	print("not letters ")
+else:
+	print("letters")
 
 # open and read the data file
 print()
@@ -107,81 +112,46 @@ with open(file_input,'rt') as file1:
 			file2.write(line) #  write the header to the output file 
 			file3.write(line)
 
-			while True:
-				line = file1.readline()
-				if line.endswith('\n') : # line with data ends with '\n'
-					
-					item_list = line.split(',') #  split the line into the list by commas
-
-					# validate the fields of the line/ the elements of the list 
-					# the criterias of validation can be found at the specification of the project
-
-					iso_code = item_list[0]
-					# iso_code field can contain '_', for example OWID_KOS
-					# to keep such kind of values:
-					iso_code = iso_code.replace('_','')
-					# also the field con contain (), for example Sint Maarten (Dutch part)
-					# to handle this, replace ()
-					iso_code = iso_code.replace("(",'')
-					iso_code = iso_code.replace(")",'')
-					iso_code = iso_code.strip() # remove leading and trailing whitespaces
-					# create a list with all words in the iso_code
-					w_list = iso_code.split(' ')
-					print(w_list)
-					# loop throught each word and validate it contains only letters
-					for w in w_list:
-						if not w.isalpha()  :
-							file3.write(line) # write to the errors file
-							
-
-					'''
-					continent = item_list[1]
-					continent = continent.strip() # remove leading and trailing whitespaces
-					if continent != '' :
-						if continent not in ('Asia', 'Europe','Oceania','North America','South America','Africa') :
-							file3.write(line) # write to the errors file
-					'''		
-					
-
-
-
-
-
-					# if line.endswith('\n') loop	
-					file2.write(line) 
-					
-				else: # if it is not line with data, empty line
-					break
 			
-			'''
+			lines = file1.readlines() # read all lines 
 			
+			for line in lines :
+				item_list = line.split(',') #  split the line into the list by the commas
 				
-			
-				
+				iso_code = item_list[0]
 				continent = item_list[1]
-				continent = continent.strip()
-				if continent not in ('Asia', 'Europe','Oceania','North America','South America','Africa') :
+				location = item_list[2]
+				
+				
+				iso_code = iso_code.strip()
+				iso_code = iso_code.replace('_','')
+				iso_code = iso_code.replace("(","")
+				iso_code = iso_code.replace(")","")
+				iso_code = iso_code.replace(' ','')
+				if not iso_code.isalpha() :
 					file3.write(line)
 					continue
 				
 
+				continent = continent.strip() # remove leading and trailing whitespaces
+				if continent != '' :
+					if continent not in ('Asia', 'Europe','Oceania','North America','South America','Africa') :
+						file3.write(line) # write to the errors file
+						continue
 
-				location = item_list[2]
+								
 				location = location.strip()
 				# the name of a country can contain more than one word
 				# as well the locaton can contain ' or - (for example Cote d'Ivoire, Guinea-Bissau)
 				location = location.replace("'",'')
-				location = location.replace('-',' ')
-				words_list = location.split(' ')
-				# loop throught the list to validate that each element contains only letters
-				# if not, move the row to the errors file
-				for w in words_list :
-					if not w.isalpha() :
-						file3.write(line)
-						continue
-				
-				
+				location = location.replace('_','')
+				location = location.replace('-','')
+				location = location.replace(' ','')
+				if not location.isalpha() :
+					file3.write(line)
+					continue
 
+				#---------------------------------------------------------------------------------
 				#  validate the date field
 				my_date = item_list[3]
 				# check if the format is correct
@@ -221,8 +191,13 @@ with open(file_input,'rt') as file1:
 					elif not int(list2[2]) in range(2019, 2021) :
 						file3.write(line)
 						continue
-    			
+				# the validation of the date field is over 
+    			#----------------------------------------------------------------------------------
 
+
+				file2.write(line)
+
+				'''
 					
 				# validate the following fields, positive integers, zero or null are allowed 
 				total_cases = item_list[4]
