@@ -17,9 +17,9 @@ Specification:
 			3)location: the name of a country, not null 
 			4)date at the format M/D/YYYY, not null 
 
-			5)total cases: a positive integer or zero 
-			6)new cases: a positive integer or zero
-			7)total deaths: a positie integer or zero 
+			5)total_cases: a positive integer or zero 
+			6)new_cases: a positive integer or zero
+			7)total_deaths: a positie integer or zero 
 			8)new_deaths: a positive integer or zero
 
 			9)total_cases_per_million: a positive number int/ decimal or zero
@@ -193,6 +193,47 @@ with open(file_input,'rt') as file1:
 						continue
 				# the validation of the date field is over 
     			#----------------------------------------------------------------------------------
+
+				# validate the following fields (a positive number integer or zero, blank is not allowed)
+				# total_cases, new_cases, total_deaths, new_deaths 
+				total_cases = item_list[4]
+				new_cases = item_list[5]
+				total_deaths = item_list[6]
+				new_deaths = item_list[7]
+
+				# declare a list for these fields
+				case_list = []
+				# populate the list with the values of the validated fields
+				case_list.append(total_cases)
+				case_list.append(new_cases)
+				case_list.append(total_deaths)
+				case_list.append(new_deaths)
+
+				# create a function to do the validation 
+				def validate_test(item) :
+					item = item.strip()
+					function_result = item.isdigit()
+					return function_result
+
+
+				# iterate through the case_list and check of the elements contain only digits or blank 
+				""" for item in case_list :
+					# call the function validate_test(item) and provide the value
+					function_result = validate_test(item)
+					if function_result == False :
+						file3.write(line) # write to the errors file
+						continue  """		
+
+				
+				function_result = validate_test(total_cases)
+				if function_result == False :
+					file3.write(line)
+					continue
+
+			
+						
+
+
 
 
 				file2.write(line)
