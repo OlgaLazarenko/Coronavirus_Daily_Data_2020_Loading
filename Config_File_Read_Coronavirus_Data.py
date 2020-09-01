@@ -198,15 +198,15 @@ with open(file_input,'rt') as file1:
 				# create function to validate integer/ or blank
 				def validate_int(item) :
 					item = item.strip() # remove whitespaces
-					item = item.remove(',','')
+					item = item.replace(',','')
 					result_int = item.isdigit()
 					return result_int
 
 				# create function to validate number (integer/or float, or blank)
 				def validate_num(item) :
 					item = item.strip()
-					item = item.remove('.','')
-					item = item.remove(',','')
+					item = item.replace('.','')
+					item = item.replace(',','')
 					result_num = item.isdigit()
 					return result_num
 
