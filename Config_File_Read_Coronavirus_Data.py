@@ -32,10 +32,12 @@ Specification:
 			15)total_tests_per_fhousand: a positive integer or zero
 			16)new_tests_smoothed: a positive integer or zero
 			17)new_tests_smoothed_per_thousand: a positive integer or zero 
+
 			18)tests_units
-			19)stringency_index:a positive decimal or integer,zero or null are allowed
+			19)stringency_index:a positive decimal or integer,zero 
 			20)population: a positive integer, zero or null are not allowed
 			21)population_density: a positive decimal or integer, zero or null are allowed
+			
 			23)median_age: a positive integer, zero or null are  allowed
 			24)aged_65_older: a positive decimal or integer,<100, zero or null are  not allowed
 			25)aged_70_older: a positive decimal or integer, <100, zero or null are not alloed
@@ -215,21 +217,62 @@ with open(file_input,'rt') as file1:
 					function_result = item.isdigit()
 					return function_result
 
-
-				# iterate through the case_list and check of the elements contain only digits or blank 
-				""" for item in case_list :
-					# call the function validate_test(item) and provide the value
-					function_result = validate_test(item)
-					if function_result == False :
-						file3.write(line) # write to the errors file
-						continue  """		
-
 				
 				function_result = validate_test(total_cases)
 				if function_result == False :
 					file3.write(line)
 					continue
 
+				function_result = validate_test(new_cases)
+				if function_result == False :
+					file3.write(line)
+					continue
+
+				function_result = validate_test(total_deaths)
+				if function_result == False :
+					file3.write(line)
+					continue 
+
+				function_result = validate_test(new_deaths)
+				if function_result == False :
+					file3.write(line)
+					continue 
+				
+				# ---------------------------------------------------------------------------
+				# the validation of the fields item_list[8:12], a positive number, decimal or integer, not zero
+				total_cases_per_million = item_list[8]
+				new_cases_per_million = item_list[9]
+				total_deaths_per_million = item_list[10]
+				new_deaths_per_million = item_list[11]
+				# create a function 
+				def validate_test_per_mln(item) :
+					item = item.strip()
+					item = item.replace('.','')
+					b = item.isdigit()
+					return b	 
+
+				# call the function 
+				b = validate_test_per_mln(total_cases_per_million)
+				if b == False :
+					file3.write(line)
+					continue
+
+				b = validate_test_per_mln(new_cases_per_million)
+				if b == False :
+					file3.write(line)
+					continue
+
+				b = validate_test_per_mln(total_deaths_per_million)
+				if b == False :
+					file3.write(line)
+					continue
+
+				b = validate_test_per_mln(new_deaths_per_million)
+				if b == False :
+					file3.write(line)
+					continue 
+					
+					
 			
 						
 
