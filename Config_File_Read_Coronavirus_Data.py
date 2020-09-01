@@ -12,9 +12,9 @@ Description: the purpose of the program:
 			  count the rows with errors for each field			 
 			 	
 Specification:
-			1)iso_code: not null 
-			2)continent: the name of a continent, a string, not null
-			3)location: the name of a country, not null 
+			1)iso_code: not null, not number  
+			2)continent: the name of a continent, a string, not null, not blank
+			3)location: the name of a country, not null, not blank 
 			4)date at the format M/D/YYYY, not null 
 
 			5)total_cases: a positive integer or zero 
@@ -27,29 +27,29 @@ Specification:
 			11)total_deaths_per_million: a positive number int/ decimal or zero
 			12)new_deaths_per_million: a positive number int/decima or zero
 
-			13)new_tests:a positive integer or zero
-			14)total_testes: a positive integer or zero
-			15)total_tests_per_fhousand: a positive integer or zero
+			13)new_tests:a positive integer or zero, blank is allowed 
+			14)total_testes: a positive integer or zero, blank is allowed 
+			15)total_tests_per_fhousand: a positive number (can be int or float), or zero, blank is allowed 
 			16)new_tests_smoothed: a positive integer or zero
-			17)new_tests_smoothed_per_thousand: a positive integer or zero 
+			17)new_tests_smoothed_per_thousand: a positive number (int/or float), zero or blank
 
 			18)tests_units
-			19)stringency_index:a positive decimal or integer,zero 
+			19)stringency_index:a positive decimal or integer,zero, blank 
 			20)population: a positive integer, zero or null are not allowed
-			21)population_density: a positive decimal or integer, zero or null are allowed
+			21)population_density: a positive decimal or integer, zero or blank
 			
 			23)median_age: a positive integer, zero or null are  allowed
-			24)aged_65_older: a positive decimal or integer,<100, zero or null are  not allowed
-			25)aged_70_older: a positive decimal or integer, <100, zero or null are not alloed
-			26)gdp_per_capita: a positive decimal or integer, zero or null are not allowed
-			27)extrime_poverty: a positive decimal or ingter, <100, zero or null are allowed
-			28)cordiovasc_death_rate: a positive decimal or integer, zero or nul are not allowed
-			29)diabetes_prevalance: a positive decimal or integer,<100, zero or null are not alloed 
-			30)female_smokers: a positive decimal or integer,<100
-			31)male_smokers: a positive decimal or integer, <100
+			24)aged_65_older: a positive decimal or integer, zero or blank   
+			25)aged_70_older: a positive decimal or integer, zero or blank 
+			26)gdp_per_capita: a positive decimal or integer, zero or blank 
+			27)extrime_poverty: a positive decimal or ingter, zero or blank 
+			28)cordiovasc_death_rate: a positive decimal or integer 
+			29)diabetes_prevalance: a positive decimal or integer, zero  or blank 
+			30)female_smokers: a positive decimal or intege
+			31)male_smokers: a positive decimal or integer
 			32)hand_washing_facilities: a positive decimal or integer
-			33)hospital_beds_per_thousand: a positive decimal or integer, zero or null is not allowed
-			34)life_expectancy: a positive decimal or integer, zero or null is not allowed
+			33)hospital_beds_per_thousand: a positive decimal or integer, zero or blank
+			34)life_expectancy: a positive decimal or integer, zero or blank 
 				
 
 Data Source: https://data.world/markmarkoh/coronavirus-data
@@ -194,47 +194,46 @@ with open(file_input,'rt') as file1:
 						file3.write(line)
 						continue
 				# the validation of the date field is over 
-    			#----------------------------------------------------------------------------------
+    			#*****--------------------------------------*****
+				# create function to validate integer/ or blank
+				def validate_int(item) :
+					item = item.strip() # remove whitespaces
+					item = item.remove(',','')
+					result_int = item.isdigit()
+					return result_int
 
-				# validate the following fields (a positive number integer or zero, blank is not allowed)
+				# create function to validate number (integer/or float, or blank)
+				def validate_num(item) :
+					item = item.strip()
+					item = item.remove('.','')
+					item = item.remove(',','')
+					result_num = item.isdigit()
+					return result_num
+
+				# validate the following fields (a positive number integer, zero or blank)
 				# total_cases, new_cases, total_deaths, new_deaths 
 				total_cases = item_list[4]
 				new_cases = item_list[5]
 				total_deaths = item_list[6]
 				new_deaths = item_list[7]
-
-				# declare a list for these fields
-				case_list = []
-				# populate the list with the values of the validated fields
-				case_list.append(total_cases)
-				case_list.append(new_cases)
-				case_list.append(total_deaths)
-				case_list.append(new_deaths)
-
-				# create a function to do the validation 
-				def validate_test(item) :
-					item = item.strip()
-					function_result = item.isdigit()
-					return function_result
-
-				
-				function_result = validate_test(total_cases)
-				if function_result == False :
+				# call the function validate_int(item) and pass the parameters 
+				result_int = validate_num(total_cases)
+				if result_int == False :
 					file3.write(line)
 					continue
 
-				function_result = validate_test(new_cases)
-				if function_result == False :
+				result_int = validate_num(new_cases)
+				if result_int == False :
 					file3.write(line)
 					continue
 
-				function_result = validate_test(total_deaths)
-				if function_result == False :
+				result_int = validate_int(total_deaths)
+				if result_int == False :
 					file3.write(line)
 					continue 
 
-				function_result = validate_test(new_deaths)
-				if function_result == False :
+				result_int = validate_int(new_deaths)
+				if result_int == False :
 					file3.write(line)
 					continue 
 				
@@ -244,35 +243,47 @@ with open(file_input,'rt') as file1:
 				new_cases_per_million = item_list[9]
 				total_deaths_per_million = item_list[10]
 				new_deaths_per_million = item_list[11]
-				# create a function 
-				def validate_test_per_mln(item) :
-					item = item.strip()
-					item = item.replace('.','')
-					b = item.isdigit()
-					return b	 
+				# call the function validate_num(item) and pass the parameters 
+	 
 
 				# call the function 
-				b = validate_test_per_mln(total_cases_per_million)
-				if b == False :
+				result_num = validate_num(total_cases_per_million)
+				if result_num == False :
 					file3.write(line)
 					continue
 
-				b = validate_test_per_mln(new_cases_per_million)
-				if b == False :
+				result_num = validate_num(new_cases_per_million)
+				if result_num == False :
 					file3.write(line)
 					continue
 
-				b = validate_test_per_mln(total_deaths_per_million)
-				if b == False :
+				result_num = validate_num(total_deaths_per_million)
+				if result_num == False :
 					file3.write(line)
 					continue
 
-				b = validate_test_per_mln(new_deaths_per_million)
-				if b == False :
+				result_num = validate_num(new_deaths_per_million)
+				if result_num == False :
 					file3.write(line)
 					continue 
-					
-					
+				# ---------------------------------------------------------
+
+				# validate the following fields: 
+				# new_tests, total_testes, total_tests_per_fhousand,
+				# new_tests_smoothed, new_tests_smoothed_per_thousand (number, zero or blank)
+				new_tests = item_list[12]
+				total_tests = item_list[13]
+				total_tests_thous = item_list[14]
+				new_tests_sm = item_list[15]
+				new_tests_sm_fhous = item_list[16]
+
+				list3 = []
+				list3.append(new_tests)
+				list3.append(total_tests)
+				list3.append(total_tests_thous)
+				list3.append(new_tests)
+				list3.append(new_tests_sm_fhous)
+
 			
 						
 
