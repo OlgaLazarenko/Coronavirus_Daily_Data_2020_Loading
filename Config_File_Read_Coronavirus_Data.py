@@ -25,7 +25,7 @@ Specification:
 			9)total_cases_per_million: a positive number int/ decimal or zero
 			10)new_cases_per_million: a positive number int/ decimal or zero
 			11)total_deaths_per_million: a positive number int/ decimal or zero
-			12)new_deaths_per_million: a positive number int/decima or zero
+			12)new_deaths_per_million: a positive number int/decimal or zero
 
 			13)new_tests:a positive integer or zero, blank is allowed 
 			14)total_testes: a positive integer or zero, blank is allowed 
