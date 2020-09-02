@@ -195,18 +195,22 @@ with open(file_input,'rt') as file1:
 						continue
 				# the validation of the date field is over 
     			#*****--------------------------------------*****
-				# create function to validate integer/ or blank
+				# create function to validate integer
 				def validate_int(item) :
 					item = item.strip() # remove whitespaces
 					item = item.replace(',','')
+					if item == '' :
+						item = '0'
 					result_int = item.isdigit()
 					return result_int
 
-				# create function to validate number (integer/or float, or blank)
+				# create function to validate number (integer/or float)
 				def validate_num(item) :
 					item = item.strip()
 					item = item.replace('.','')
 					item = item.replace(',','')
+					if item == '' :
+						item ='0'
 					result_num = item.isdigit()
 					return result_num
 
@@ -222,10 +226,13 @@ with open(file_input,'rt') as file1:
 					file3.write(line)
 					continue
 
+
 				result_int = validate_num(new_cases)
 				if result_int == False :
 					file3.write(line)
 					continue
+
+
 
 				result_int = validate_int(total_deaths)
 				if result_int == False :
@@ -268,21 +275,56 @@ with open(file_input,'rt') as file1:
 					continue 
 				# ---------------------------------------------------------
 
-				# validate the following fields: 
+				# validate the following fields (integers)
 				# new_tests, total_testes, total_tests_per_fhousand,
-				# new_tests_smoothed, new_tests_smoothed_per_thousand (number, zero or blank)
+				# new_tests_smoothed, new_tests_smoothed_per_thousand 
 				new_tests = item_list[12]
 				total_tests = item_list[13]
 				total_tests_thous = item_list[14]
 				new_tests_sm = item_list[15]
 				new_tests_sm_fhous = item_list[16]
 
-				list3 = []
-				list3.append(new_tests)
-				list3.append(total_tests)
-				list3.append(total_tests_thous)
-				list3.append(new_tests)
-				list3.append(new_tests_sm_fhous)
+				# call the function validate_int(item)
+
+				result_int = validate_int(new_tests)
+				if result_int == False :
+					file3.write(line)
+					continue
+
+				result_int = validate_int(total_tests)
+				if result_int == False :
+					file3.write(line)
+					continue
+
+				result_int = validate_int(total_tests_thous)
+				if result_int == False :
+					file3.write(line)
+					continue
+
+				result_int = validate_int(new_tests_sm)
+				if result_int == False :
+					file3.write(line)
+					continue
+
+				result_int = validate_int(new_tests_sm_fhous)
+				if result_int == False :
+					file3.write(line)
+					continue
+
+
+				population = item_list[19]
+				result_int = validate_int(population)
+				if result_int == False :
+					file3.write(line)
+					continue
+
+				population_dens = item_list[20]
+				result_num = validate_num(population_dens)
+				if result_int == False :
+					file3.write(line)
+					continue
+
+			
 
 			
 						
