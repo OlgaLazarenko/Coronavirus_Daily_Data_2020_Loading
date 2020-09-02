@@ -185,7 +185,7 @@ with open(file_input,'rt') as file1:
 				else:
 					# the elements contain only numbers
 					# now check if the values are in the correct range
-					# as well the days range depends on the month
+					# as well the days range depends on the month for 2020 year
 					if not int(list2[0]) in range(1,13) :
 						file3.write(line)
 						continue
@@ -208,6 +208,44 @@ with open(file_input,'rt') as file1:
 						if not int(list2[1]) in range(1,32) : # should contain up to 31 day
 							file3.write(line)
 							continue
+					elif int(list2[0]) == 4 : # April 
+						if not int(list2[1]) in range(1,31) : # should contain up to 30 day
+							file3.write(line)
+							continue
+					elif int(list2[0]) == 5 : # May
+						if not int(list2[1]) in range(1,31) : # should contain up to 30 day
+							file3.write(line)
+							continue
+					elif int(list2[0]) == 6 : # June 
+						if not int(list2[1]) in range(1,31) : # should contain up to 30 day
+							file3.write(line)
+							continue
+					elif int(list2[0]) == 7 : # July 
+						if not int(list2[1]) in range(1,32) : # should contain up to 31 day
+							file3.write(line)
+							continue
+					elif int(list2[0]) == 8 : # August 
+						if not int(list2[1]) in range(1,32) : # should contain up to 31 day
+							file3.write(line)
+							continue
+					elif int(list2[0]) == 9 : # September  
+						if not int(list2[1]) in range(1,31) : # should contain up to 30 day
+							file3.write(line)
+							continue
+					elif int(list2[0]) == 10 : # October 
+						if not int(list2[1]) in range(1,32) : # should contain up to 31 day
+							file3.write(line)
+							continue
+					elif int(list2[0]) == 11 : # November 
+						if not int(list2[1]) in range(1,31) : # should contain up to 31 day
+							file3.write(line)
+							continue
+					elif int(list2[0]) == 12 : # December 
+						if not int(list2[1]) in range(1,32) : # should contain up to 31 day
+							file3.write(line)
+							continue
+						
+
 
 				# the validation of the date field is over 
     			#*****--------------------------------------*****
