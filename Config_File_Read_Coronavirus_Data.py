@@ -185,6 +185,7 @@ with open(file_input,'rt') as file1:
 				else:
 					# the elements contain only numbers
 					# now check if the values are in the correct range
+					# as well the days range depends on the month
 					if not int(list2[0]) in range(1,13) :
 						file3.write(line)
 						continue
@@ -194,6 +195,20 @@ with open(file_input,'rt') as file1:
 					elif not int(list2[2]) in range(2019, 2021) :
 						file3.write(line)
 						continue
+
+					if int(list2[0]) == 1 : # January 
+						if not int(list2[1]) in range(1,32) : # should contain up to 31 day
+							file3.write(line)
+							continue
+					elif int(list2[0]) == 2 : # February 
+						if not int(list2[1]) in range(1,30) : # should contain up to 29 day
+							file3.write(line)
+							continue
+					elif int(list2[0]) == 3 : # March 
+						if not int(list2[1]) in range(1,32) : # should contain up to 31 day
+							file3.write(line)
+							continue
+
 				# the validation of the date field is over 
     			#*****--------------------------------------*****
 				# create function to validate integer
