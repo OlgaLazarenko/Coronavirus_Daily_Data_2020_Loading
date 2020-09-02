@@ -28,8 +28,8 @@ Specification:
 			12)new_deaths_per_million: a positive number int/decimal or zero
 
 			13)new_tests:a positive integer or zero, blank is allowed 
-			14)total_testes: a positive integer or zero, blank is allowed 
-			15)total_tests_per_fhousand: a positive number (can be int or float), or zero, blank is allowed 
+			14)total_testes_per_thousand: a positive integer or zero, blank is allowed 
+			15)new_tests_per_fhousand: a positive number (can be int or float), or zero, blank is allowed 
 			16)new_tests_smoothed: a positive integer or zero
 			17)new_tests_smoothed_per_thousand: a positive number (int/or float), zero or blank
 
@@ -38,18 +38,17 @@ Specification:
 			20)population: a positive integer, zero or null are not allowed
 			21)population_density: a positive decimal or integer, zero or blank
 			
-			23)median_age: a positive integer, zero or null are  allowed
-			24)aged_65_older: a positive decimal or integer, zero or blank   
-			25)aged_70_older: a positive decimal or integer, zero or blank 
-			26)gdp_per_capita: a positive decimal or integer, zero or blank 
-			27)extrime_poverty: a positive decimal or ingter, zero or blank 
-			28)cordiovasc_death_rate: a positive decimal or integer 
-			29)diabetes_prevalance: a positive decimal or integer, zero  or blank 
-			30)female_smokers: a positive decimal or intege
-			31)male_smokers: a positive decimal or integer
-			32)hand_washing_facilities: a positive decimal or integer
-			33)hospital_beds_per_thousand: a positive decimal or integer, zero or blank
-			34)life_expectancy: a positive decimal or integer, zero or blank 
+			22)median_age: a positive integer, zero or null are  allowed
+			23)aged_65_older: a positive decimal or integer, zero or blank   
+			24)aged_70_older: a positive decimal or integer, zero or blank 
+			25)gdp_per_capita: a positive decimal or integer, zero or blank 
+			26)extrime_poverty: a positive decimal or ingter, zero or blank 
+			27)cordiovasc_death_rate: a positive decimal or integer 
+			28)diabetes_prevalance: a positive decimal or integer, zero  or blank 
+			29)female_smokers: a positive decimal or integer
+			30)test_and_washing_facilities: a positive decimal or integer
+			31)hospital_beds_per_thousand: a positive decimal or integer, zero or blank
+			32)life_expectancy: a positive decimal or integer, zero or blank 
 				
 
 Data Source: https://data.world/markmarkoh/coronavirus-data
@@ -91,18 +90,18 @@ file_output = file_output[:-1]
 file_errors = file_errors[1:]
 file_errors = file_errors[:-1]
 print('---------------------')
+
 print(file_input)
+size = os.path.getsize(file_input)
+print('the file size: ' + str(size))
+print()
 print(file_output)
 print(file_errors)
 print()
 
-size = os.path.getsize(file_input)
 
-my_number = 'A7777'
-if not my_number.isalpha() :
-	print("not letters ")
-else:
-	print("letters")
+
+
 
 # open and read the data file
 print()
@@ -146,6 +145,8 @@ with open(file_input,'rt') as file1:
 				# the name of a country can contain more than one word
 				# as well the locaton can contain ' or - (for example Cote d'Ivoire, Guinea-Bissau)
 				location = location.replace("'",'')
+				location = location.replace("(","")
+				location = location.replace(")","")
 				location = location.replace('_','')
 				location = location.replace('-','')
 				location = location.replace(' ','')
@@ -208,12 +209,13 @@ with open(file_input,'rt') as file1:
 				def validate_num(item) :
 					item = item.strip()
 					item = item.replace('.','')
-					item = item.replace(',','')
 					if item == '' :
 						item ='0'
 					result_num = item.isdigit()
 					return result_num
 
+
+				
 				# validate the following fields (a positive number integer, zero or blank)
 				# total_cases, new_cases, total_deaths, new_deaths 
 				total_cases = item_list[4]
@@ -233,7 +235,7 @@ with open(file_input,'rt') as file1:
 					continue
 
 
-
+				
 				result_int = validate_int(total_deaths)
 				if result_int == False :
 					file3.write(line)
@@ -258,7 +260,7 @@ with open(file_input,'rt') as file1:
 				if result_num == False :
 					file3.write(line)
 					continue
-
+				
 				result_num = validate_num(new_cases_per_million)
 				if result_num == False :
 					file3.write(line)
@@ -281,175 +283,77 @@ with open(file_input,'rt') as file1:
 				new_tests = item_list[12]
 				total_tests = item_list[13]
 				total_tests_thous = item_list[14]
-				new_tests_sm = item_list[15]
-				new_tests_sm_fhous = item_list[16]
+				new_tests_thous = item_list[15]
+				new_tests_sm = item_list[16]
+				new_tests_sm_thous = item_list[17]
 
-				# call the function validate_int(item)
-
+				
+				
 				result_int = validate_int(new_tests)
 				if result_int == False :
 					file3.write(line)
 					continue
-
+				
 				result_int = validate_int(total_tests)
 				if result_int == False :
 					file3.write(line)
 					continue
-
-				result_int = validate_int(total_tests_thous)
+				
+				result_int = validate_num(total_tests_thous)
 				if result_int == False :
 					file3.write(line)
 					continue
-
+				
+				result_num = validate_num(new_tests_thous)
+				if result_num == False :
+					file3.write(line)
+					continue
+				
 				result_int = validate_int(new_tests_sm)
 				if result_int == False :
 					file3.write(line)
 					continue
-
-				result_int = validate_int(new_tests_sm_fhous)
-				if result_int == False :
+				
+				result_num = validate_num(new_tests_sm_thous)
+				if result_num == False :
 					file3.write(line)
 					continue
+				
 
-
-				population = item_list[19]
+				
+				population = item_list[20]
 				result_int = validate_int(population)
 				if result_int == False :
 					file3.write(line)
 					continue
-
-				population_dens = item_list[20]
-				result_num = validate_num(population_dens)
-				if result_int == False :
-					file3.write(line)
-					continue
-
-			
-
-			
-						
-
-
-
-
-				file2.write(line)
-
-				'''
-					
-				# validate the following fields, positive integers, zero or null are allowed 
-				total_cases = item_list[4]
-				new_cases = item_list[5]
-				total_deaths = item_list[6]
-				new_deathes = item_list[7]
-
-				list3 = []
-				list3.append(total_cases)
-				list3.append(new_cases)
-				list3.append(total_deaths)
-				list3.append(new_deathes)
-					
 				
-				if not total_cases.isdigit() :
-					file3.write(line)
-					continue
-				
-				if not new_cases.isdigit() :
-					file3.write(line)
-					continue
-
-				if not total_deaths.isdigit() :
-					file3.write(line)
-					continue
-
-				if not new_deathes.isdigit() :
-					file3.write(line)
-					continue
-
-
-				
-				total_cases_per_million = item_list[8]
-				new_cases_per_million = item_list[9]
-				total_deaths_per_million = item_list[10]
-				new_deaths_per_million = item_list[11]
-				
-				# validate the mentioned above values
-				# find out if the value is a positive integer/ or float, otherwise it is an error 
-
-
-				
-			
-				new_tests = item_list[12]
-				total_tests = item_list[13]
-				total_tests_per_thousand = item_list[14]
-				new_tests_per_thousand = item_list[15]
-				new_tests_smoothed = item_list[16]
-				new_tests_smoothed_per_thousand = item_list[17]
-
-				'''
-			
-
-				
-
-
-				
-			
-				
-				
-
-				
-						
-
-			'''
-				#  validate the population field
-				population = item_list[20]
-				try:
-					int(population) > 0 
-				except:
-					file3.write(line)
-					continue
-
-				# validate the following fields
-
-				# decalare variables
 				population_dens = item_list[21]
-				median_age = item_list[22]
-				aged_65_older = item_list[23]
-				aged_70_older = item_list[24]
-				gdp = item_list[25]
-				poverty = item_list[26]
-				cardio = item_list[27]
-				diabet = item_list[28]
-				female_smokers = item_list[29]
-				male_smokers = item_list[30]
-				hand_washing_facilities = item_list[31]
-				hospital_beds = item_list[32]
-				life_expectancy = item_list[33]
+				result_num = validate_num(population_dens)
+				if result_num == False :
+					file3.write(line)
+					continue
+				
+			
 
-				list2 = [] #  declare a list
-				list2.append(population_dens)
-				list2.append(median_age)
-				list2.append(aged_65_older)
-				list2.append(aged_70_older)
-				list2.append(gdp)
-				list2.append(poverty)
-				list2.append(cardio)
-				list2.append(diabet)
-				list2.append(female_smokers)
-				list2.append(male_smokers)
-				list2.append(hand_washing_facilities)
-				list2.append(life_expectancy)
-				
-				
-				for item in list2 :
-					try :
-						isinstance(float(item), numbers.Number)						
-					except :
-						if item.strip() == '' :
-							continue
-						else:
-							file3.write(line)
-							continue
-			'''
+			# validate the fields: 
+			median_age = item_list[22]
+			aged_65_older = item_list[23]
+			aged_70_older = item_list[24]
+			gdp_per_capita = item_list[25]
+			extreme_poverty = item_list[26]
+			cardio_death_rate = item_list[27]
+			diabet_prev = item_list[28]
+			female_smokers = item_list[29]
+			male_smokers = item_list[30]
+						
+
+
+
+
+			file2.write(line)
+
+
+			
 				
 
 				
