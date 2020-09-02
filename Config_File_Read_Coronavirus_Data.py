@@ -335,16 +335,66 @@ with open(file_input,'rt') as file1:
 				
 			
 
-			# validate the fields: 
-			median_age = item_list[22]
-			aged_65_older = item_list[23]
-			aged_70_older = item_list[24]
-			gdp_per_capita = item_list[25]
-			extreme_poverty = item_list[26]
-			cardio_death_rate = item_list[27]
-			diabet_prev = item_list[28]
-			female_smokers = item_list[29]
-			male_smokers = item_list[30]
+				# validate the fields: 
+				median_age = item_list[22]
+				aged_65_older = item_list[23]
+				aged_70_older = item_list[24]
+				gdp_per_capita = item_list[25]
+				extreme_poverty = item_list[26]
+				cardio_death_rate = item_list[27]
+				diabet_prev = item_list[28]
+				female_smokers = item_list[29]
+				male_smokers = item_list[30]
+
+
+				# call the functions validate_int(item), validate_num(item)
+				# to validate the mentioned above fields
+
+				result_num = validate_num(median_age)
+				if result_num == False :
+					file3.write(line)
+					continue
+			
+				result_num = validate_num(aged_65_older)
+				if result_num == False :
+					file3.write(line)
+					continue
+
+				result_num = validate_num(aged_70_older)
+				if result_num == False :
+					file3.write(line)
+					continue
+
+				result_num = validate_num(gdp_per_capita)
+				if result_num == False :
+					file3.write(line)
+					continue
+
+				result_num = validate_num(extreme_poverty)
+				if result_num == False :
+					file3.write(line)
+					continue
+
+				result_num = validate_num(cardio_death_rate)
+				if result_num == False :
+					file3.write(line)
+					continue
+
+				result_num = validate_num(diabet_prev)
+				if result_num == False :
+					file3.write(line)
+					continue
+
+				result_num = validate_num(female_smokers)
+				if result_num == False :
+					file3.write(line)
+					continue
+
+				result_num = validate_num(male_smokers)
+				if result_num == False : 
+					file3.write(line)
+					continue
+			
 						
 
 
