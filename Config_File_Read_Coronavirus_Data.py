@@ -71,15 +71,12 @@ my_file= 'E:\_Python_Projects\GitHub_Coronavirus_Daily_Data_2020_Loading\Variabl
 
 config = configparser.ConfigParser() # initialize a ConfigParser object
 config.read(my_file)
-print('*-----------------*')
 print(config.sections())
 
 #get the files from the configuration file Variables_File.ini
 file_input= config.get('files','input_file')
 file_output= config.get('files','output_file')
 file_errors= config.get('files','errors_file')
-
-
 print()
 file_input = file_input[1:]
 file_input = file_input[:-1]
@@ -89,19 +86,12 @@ file_output = file_output[:-1]
 
 file_errors = file_errors[1:]
 file_errors = file_errors[:-1]
-print('---------------------')
 
-print(file_input)
 size = os.path.getsize(file_input)
-print('the file size: ' + str(size))
-print()
+print(file_input + '  ----- the initial file size: '+ str(size))
 print(file_output)
 print(file_errors)
 print()
-
-
-
-
 
 # open and read the data file
 print()
@@ -118,12 +108,8 @@ with open(file_input,'rt') as file1:
 			
 			for line in lines :
 				item_list = line.split(',') #  split the line into the list by the commas
-				
+	
 				iso_code = item_list[0]
-				continent = item_list[1]
-				location = item_list[2]
-				
-				
 				iso_code = iso_code.strip()
 				iso_code = iso_code.replace('_','')
 				iso_code = iso_code.replace("(","")
@@ -132,15 +118,15 @@ with open(file_input,'rt') as file1:
 				if not iso_code.isalpha() :
 					file3.write(line)
 					continue
-				
 
+				continent = item_list[1]
 				continent = continent.strip() # remove leading and trailing whitespaces
 				if continent != '' :
 					if continent not in ('Asia', 'Europe','Oceania','North America','South America','Africa') :
 						file3.write(line) # write to the errors file
 						continue
-
-								
+					
+				location = item_list[2]								
 				location = location.strip()
 				# the name of a country can contain more than one word
 				# as well the locaton can contain ' or - (for example Cote d'Ivoire, Guinea-Bissau)
@@ -164,14 +150,16 @@ with open(file_input,'rt') as file1:
 					# format is correct, continue the checking
 					# split the value by the dashes, create a list
 					list2 = my_date.split('/')
-					# month, day, year values became the elements of the list
+					# [month, day, year] values became the elements of the list
 				else:
 					# if the format is wrong, write the line to the errors file 
 					file3.write(line)
 					continue
 
 				
-				# when the format of the date value is OK, check each element of the list
+				
+
+				# when the format of the date value is OK, check each element of the date (day/month/year)
 				# check if the elements contains only numbers
 				if not list2[0].isdigit() :
 					file3.write(line)
@@ -213,7 +201,7 @@ with open(file_input,'rt') as file1:
 							file3.write(line)
 							continue
 					elif int(list2[0]) == 5 : # May
-						if not int(list2[1]) in range(1,31) : # should contain up to 30 day
+						if not int(list2[1]) in range(1,32) : # should contain up to 30 day
 							file3.write(line)
 							continue
 					elif int(list2[0]) == 6 : # June 
@@ -244,11 +232,10 @@ with open(file_input,'rt') as file1:
 						if not int(list2[1]) in range(1,32) : # should contain up to 31 day
 							file3.write(line)
 							continue
-						
-
-
+					
 				# the validation of the date field is over 
-    			#*****--------------------------------------*****
+    			#---------------------------------------------------------------------------------
+
 				# create function to validate integer
 				def validate_int(item) :
 					item = item.strip() # remove whitespaces
@@ -267,9 +254,9 @@ with open(file_input,'rt') as file1:
 					result_num = item.isdigit()
 					return result_num
 
+				#----------------------------------------------------------------------------------
 
-				
-				# validate the following fields (a positive number integer, zero or blank)
+				# validate the following fields (a positive integer, zero or blank):
 				# total_cases, new_cases, total_deaths, new_deaths 
 				total_cases = item_list[4]
 				new_cases = item_list[5]
@@ -281,14 +268,11 @@ with open(file_input,'rt') as file1:
 					file3.write(line)
 					continue
 
-
 				result_int = validate_num(new_cases)
 				if result_int == False :
 					file3.write(line)
 					continue
 
-
-				
 				result_int = validate_int(total_deaths)
 				if result_int == False :
 					file3.write(line)
@@ -298,17 +282,16 @@ with open(file_input,'rt') as file1:
 				if result_int == False :
 					file3.write(line)
 					continue 
-				
-				# ---------------------------------------------------------------------------
-				# the validation of the fields item_list[8:12], a positive number, decimal or integer, not zero
+
+				# --------------------------------------------------------
+
+				# the validation of the fields: item_list[8:12], a positive number, decimal or integer, not zero
 				total_cases_per_million = item_list[8]
 				new_cases_per_million = item_list[9]
 				total_deaths_per_million = item_list[10]
 				new_deaths_per_million = item_list[11]
 				# call the function validate_num(item) and pass the parameters 
 	 
-
-				# call the function 
 				result_num = validate_num(total_cases_per_million)
 				if result_num == False :
 					file3.write(line)
@@ -330,7 +313,7 @@ with open(file_input,'rt') as file1:
 					continue 
 				# ---------------------------------------------------------
 
-				# validate the following fields (integers)
+				# validate the following fields (integers):
 				# new_tests, total_testes, total_tests_per_fhousand,
 				# new_tests_smoothed, new_tests_smoothed_per_thousand 
 				new_tests = item_list[12]
@@ -340,8 +323,6 @@ with open(file_input,'rt') as file1:
 				new_tests_sm = item_list[16]
 				new_tests_sm_thous = item_list[17]
 
-				
-				
 				result_int = validate_int(new_tests)
 				if result_int == False :
 					file3.write(line)
@@ -366,13 +347,11 @@ with open(file_input,'rt') as file1:
 				if result_int == False :
 					file3.write(line)
 					continue
-				
+
 				result_num = validate_num(new_tests_sm_thous)
 				if result_num == False :
 					file3.write(line)
 					continue
-				
-
 				
 				population = item_list[20]
 				result_int = validate_int(population)
@@ -386,8 +365,8 @@ with open(file_input,'rt') as file1:
 					file3.write(line)
 					continue
 				
-			
-
+				#-----------------------------------------------------
+				
 				# validate the fields: 
 				median_age = item_list[22]
 				aged_65_older = item_list[23]
@@ -447,21 +426,15 @@ with open(file_input,'rt') as file1:
 				if result_num == False : 
 					file3.write(line)
 					continue
-			
-						
 
-
-
-
-			file2.write(line)
+				
+				file2.write(line)
 
 
 			
 				
 
-				
-
-
+	
 
  # print sample data from the input file and the output file 		
 print('The initial file (sample):')
